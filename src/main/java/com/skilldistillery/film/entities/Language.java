@@ -34,7 +34,7 @@ public class Language {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Language:      ").append(languageName);
+		builder.append(languageName);
 		return builder.toString();
 	}
 

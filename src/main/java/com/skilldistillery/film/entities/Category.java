@@ -34,7 +34,7 @@ public class Category {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("Category:      ").append(categoryName);
+		builder.append(categoryName);
 		return builder.toString();
 	}
 
