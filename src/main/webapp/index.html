@@ -11,9 +11,15 @@
 	<p><a href="ListAllFilms.do">List all Films</a></p>
 	<p><a href="addFilm.html">Add film to database</a></p>
 	
-	<p>Find a film by ID: </p>
+	 <p>Find a film by ID: </p>
 	<form action="GetFilmById.do" method="GET">
 		<input type="text" name="id" size="4"/> 
+		<input type="submit" value="Get Film Details" />
+	</form><br/>
+	
+	<p>Find a film by Keyword: </p>
+	<form action="GetFilmsByKeyword.do" method="GET">
+		<input type="text" name="keyword" size="4"/> 
 		<input type="submit" value="Get Film Details" />
 	</form><br/>
 	

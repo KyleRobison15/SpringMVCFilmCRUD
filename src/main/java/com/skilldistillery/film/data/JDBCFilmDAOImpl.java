@@ -112,7 +112,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -141,7 +141,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			film.setFilmsInInventory(findInventoryByFilmId(filmResult.getInt("id")));
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return film;
@@ -201,6 +201,117 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	    conn.close();
 		return null;
 	}
+//	TODO refine logic to match update and delete as these methods were copy pasted
+	@Override
+	public Film updateFilmInDatabase(Film film) throws SQLException {
+		
+		Connection conn = null;
+		String sql = "UPDATE film SET title, description, release_year, language_id, rental_duration, "
+				+ "rental_rate, length, replacement_cost, rating, special_features WHERE"
+				+ "title, description, release_year, language_id, rental_duration, \"\n"
+				+ "				+ \"rental_rate, length, replacement_cost, rating, special_features = ?";
+		
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			conn.setAutoCommit(false); // Start transaction
+			
+			PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, film.getTitle());
+			st.setString(2, film.getDescription());
+			st.setString(3, film.getReleaseYear());
+			st.setInt(4, film.getRentalDuration());
+			st.setDouble(5, film.getRentalRate());
+			st.setInt(6, film.getLength());
+			st.setDouble(7, film.getReplacementCost());
+			st.setString(8, film.getRating());
+			st.setString(9, film.getSpecialFeatures());
+			
+			int uc = st.executeUpdate();
+			System.out.println(uc + " film records created.");
+			
+			if (uc != 1) {
+				System.err.println("Something went wrong"); //Error handling in case the INSERT did not work properly
+				conn.rollback(); //Error handling in case the INSERT did not work properly
+				return null;
+			}
+			
+			
+			// Now get the auto-generated actor IDs:
+			ResultSet keys = st.getGeneratedKeys();
+			
+			int filmId = 0;
+			while (keys.next()) {
+				filmId = keys.getInt(1);
+				System.out.println("New film ID: " + filmId);
+			}
+			
+			conn.commit();
+			
+			return findFilmById(filmId);
+			
+		}
+		catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}
+		conn.close();
+		return null;
+	}
+	
+	@Override
+	public Film deleteFilmFromDatabase(Film film) throws SQLException {
+		
+		Connection conn = null;
+		String sql = "DELETE FROM film (title, description, release_year, language_id, rental_duration, "
+				+ "rental_rate, length, replacement_cost, rating, special_features)"
+				+ "VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?)";
+		
+		try {
+			conn = DriverManager.getConnection(URL, user, pass);
+			conn.setAutoCommit(false); // Start transaction
+			
+			PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			st.setString(1, film.getTitle());
+			st.setString(2, film.getDescription());
+			st.setString(3, film.getReleaseYear());
+			st.setInt(4, film.getRentalDuration());
+			st.setDouble(5, film.getRentalRate());
+			st.setInt(6, film.getLength());
+			st.setDouble(7, film.getReplacementCost());
+			st.setString(8, film.getRating());
+			st.setString(9, film.getSpecialFeatures());
+			
+			int uc = st.executeUpdate();
+			System.out.println(uc + " film records created.");
+			
+			if (uc != 1) {
+				System.err.println("Something went wrong"); //Error handling in case the INSERT did not work properly
+				conn.rollback(); //Error handling in case the INSERT did not work properly
+				return null;
+			}
+			
+			
+			// Now get the auto-generated actor IDs:
+			ResultSet keys = st.getGeneratedKeys();
+			
+			int filmId = 0;
+			while (keys.next()) {
+				filmId = keys.getInt(1);
+				System.out.println("New film ID: " + filmId);
+			}
+			
+			conn.commit();
+			
+			return findFilmById(filmId);
+			
+		}
+		catch (SQLException e) {
+			conn.rollback();
+			e.printStackTrace();
+		}
+		conn.close();
+		return null;
+	}
 	
 /////////////////////////////////////////////////// ACTOR ///////////////////////////////////////////////////
 
@@ -229,7 +340,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -267,7 +378,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -303,7 +414,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -339,7 +450,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -379,7 +490,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			conn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

@@ -19,4 +19,6 @@ public interface FilmDAO {
 	public List<Film> findFilmsByKeyword(String keyword);
 	public List<Actor> findActorsByFilmId(int filmId);
 	public Film insertFilmToDatabase(Film film) throws SQLException;
+	public Film updateFilmInDatabase(Film film) throws SQLException;
+	public Film deleteFilmFromDatabase(Film film) throws SQLException;
 }
