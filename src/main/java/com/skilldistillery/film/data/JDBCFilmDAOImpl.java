@@ -264,47 +264,23 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	public Film deleteFilmFromDatabase(Film film) throws SQLException {
 		
 		Connection conn = null;
-		String sql = "DELETE FROM film (title, description, release_year, language_id, rental_duration, "
-				+ "rental_rate, length, replacement_cost, rating, special_features)"
-				+ "VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?)";
+		String sql = "DELETE FROM film WHERE id = ?";
 		
 		try {
 			conn = DriverManager.getConnection(URL, user, pass);
 			conn.setAutoCommit(false); // Start transaction
 			
-			PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-			st.setString(1, film.getTitle());
-			st.setString(2, film.getDescription());
-			st.setString(3, film.getReleaseYear());
-			st.setInt(4, film.getRentalDuration());
-			st.setDouble(5, film.getRentalRate());
-			st.setInt(6, film.getLength());
-			st.setDouble(7, film.getReplacementCost());
-			st.setString(8, film.getRating());
-			st.setString(9, film.getSpecialFeatures());
+			PreparedStatement st = conn.prepareStatement(sql);
+			st.setInt(1, film.getFilmId());
 			
 			int uc = st.executeUpdate();
-			System.out.println(uc + " film records created.");
 			
 			if (uc != 1) {
-				System.err.println("Something went wrong"); //Error handling in case the INSERT did not work properly
-				conn.rollback(); //Error handling in case the INSERT did not work properly
+				conn.rollback(); //Error handling in case the DELETE did not work properly
 				return null;
 			}
 			
-			
-			// Now get the auto-generated actor IDs:
-			ResultSet keys = st.getGeneratedKeys();
-			
-			int filmId = 0;
-			while (keys.next()) {
-				filmId = keys.getInt(1);
-				System.out.println("New film ID: " + filmId);
-			}
-			
 			conn.commit();
-			
-			return findFilmById(filmId);
 			
 		}
 		catch (SQLException e) {
@@ -312,7 +288,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			e.printStackTrace();
 		}
 		conn.close();
-		return null;
+		return film;
 	}
 	
 /////////////////////////////////////////////////// ACTOR ///////////////////////////////////////////////////

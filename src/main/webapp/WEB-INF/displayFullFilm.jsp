@@ -64,15 +64,15 @@
 		</c:otherwise>
 	</c:choose>
 	
-	<p>Update Query:</p>
+	<p>Update Film Information:</p>
 	<form action="updateFilm.jsp">
 	<%-- <input id="filmId" type="hidden" value=${film.id } name="filmId"> --%>
- 	<input type= "submit" value="Edit" >
+ 	<input type= "submit" value="Edit Film Details" >
 	</form>
-	<p>Delete from Query:</p>
-	<form action="deleteFilm.jsp">
-	<%-- <input id="filmId" type="hidden" value=${film.id } name="filmId"> --%>
- 	<input type= "submit" value="Delete" >
+	
+	<form action="ConfirmDelete.do">
+		<input id="id" type="hidden" value=${film.filmId } name="id">
+ 		<input type= "submit" value="Delete Film" >
 	</form>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>

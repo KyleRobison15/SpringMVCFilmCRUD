@@ -46,21 +46,20 @@ public class FilmController {
 	}
 
 	@RequestMapping(path = "AddFilm.do", method = RequestMethod.POST)
-	public ModelAndView addNewState(Film film, RedirectAttributes redir) throws SQLException {
+	public ModelAndView addNewFilm(Film film, RedirectAttributes redir) throws SQLException {
 		filmDAO.insertFilmToDatabase(film);
 		ModelAndView mv = new ModelAndView();
 		redir.addFlashAttribute("film", film);
 		mv.setViewName("redirect:filmAdded.do");
 		return mv;
 	}
-	
-	  @RequestMapping(path = "filmAdded.do", method = RequestMethod.GET)
-	  public ModelAndView stateCreated (Film film) {
-		  ModelAndView mv = new ModelAndView();
-		  mv.setViewName("filmAdded");
-		  return mv;
-	  }
-	
+
+	@RequestMapping(path = "filmAdded.do", method = RequestMethod.GET)
+	public ModelAndView filmCreated(Film film) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("filmAdded");
+		return mv;
+	}
 
 	@RequestMapping(path = "GetFilmsByKeyword.do", params = "keyword", method = RequestMethod.GET)
 	public ModelAndView getFilmsByKeyword(@RequestParam("keyword") String keyword) {
@@ -81,14 +80,31 @@ public class FilmController {
 
 		return mv;
 	}
-
-	@RequestMapping(path = "deleteFilm.do", params = "film", method = RequestMethod.GET)
-	public ModelAndView deleteFilmFromDatabase(@RequestParam("film") Film film) throws SQLException {
+	
+	@RequestMapping(path = "ConfirmDelete.do", params = "id", method = RequestMethod.GET)
+	public ModelAndView confirmDelete(@RequestParam("id") int id) {
 		ModelAndView mv = new ModelAndView();
-		Film films = filmDAO.deleteFilmFromDatabase(film);
-		mv.addObject("films", films);
-		mv.setViewName("listFilms");
+		Film film = filmDAO.findFilmById(id);
+		mv.addObject("film", film);
+		mv.setViewName("deleteFilm");
 
+		return mv;
+	}
+
+	@RequestMapping(path = "DeleteFilm.do", params = "id", method = RequestMethod.POST)
+	public ModelAndView deleteFilm(int id, RedirectAttributes redir) throws SQLException {
+		Film film = filmDAO.findFilmById(id);
+		filmDAO.deleteFilmFromDatabase(film);
+		ModelAndView mv = new ModelAndView();
+		redir.addFlashAttribute("film", film);
+		mv.setViewName("redirect:filmDeleted.do");
+		return mv;
+	}
+
+	@RequestMapping(path = "filmDeleted.do", method = RequestMethod.GET)
+	public ModelAndView filmDeleted(Film film) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("filmDeleted");
 		return mv;
 	}
 
