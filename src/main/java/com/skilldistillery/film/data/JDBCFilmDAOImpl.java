@@ -261,7 +261,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	}
 	
 	@Override
-	public Film deleteFilmFromDatabase(Film film) throws SQLException {
+	public int deleteFilmFromDatabase(Film film) throws SQLException {
 		
 		Connection conn = null;
 		String sql = "DELETE FROM film WHERE id = ?";
@@ -277,7 +277,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			
 			if (uc != 1) {
 				conn.rollback(); //Error handling in case the DELETE did not work properly
-				return null;
+				return 0;
 			}
 			
 			conn.commit();
@@ -285,10 +285,11 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 		}
 		catch (SQLException e) {
 			conn.rollback();
-			e.printStackTrace();
+			System.err.println("Cannot delete this record due to child table dependencies.");
+			return 0;
 		}
 		conn.close();
-		return film;
+		return 1;
 	}
 	
 /////////////////////////////////////////////////// ACTOR ///////////////////////////////////////////////////

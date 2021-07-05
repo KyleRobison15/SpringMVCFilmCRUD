@@ -65,8 +65,8 @@
 	</c:choose>
 	
 	<p>Update Film Information:</p>
-	<form action="updateFilm.jsp">
-	<%-- <input id="filmId" type="hidden" value=${film.id } name="filmId"> --%>
+	<form action="updateFilm.do">
+ 	<input id="filmId" type="hidden" value=${film.filmId } name="id">
  	<input type= "submit" value="Edit Film Details" >
 	</form>
 	

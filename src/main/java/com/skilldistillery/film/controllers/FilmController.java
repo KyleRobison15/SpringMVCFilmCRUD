@@ -71,15 +71,18 @@ public class FilmController {
 		return mv;
 	}
 
-	@RequestMapping(path = "editFilm.do", params = "film", method = RequestMethod.GET)
-	public ModelAndView updateFilmInDatabase(@RequestParam("film") Film film) throws SQLException {
+	@RequestMapping(path = "updateFilm.do", params = "id", method = RequestMethod.GET)
+	public ModelAndView updateFilmInDatabase(@RequestParam("id") int id) throws SQLException {
 		ModelAndView mv = new ModelAndView();
-		Film films = filmDAO.updateFilmInDatabase(film);
-		mv.addObject("films", films);
+		Film film = filmDAO.findFilmById(id);
+		filmDAO.updateFilmInDatabase(film);
+		mv.addObject("film", film);
 		mv.setViewName("updateFilm");
 
 		return mv;
 	}
+	
+	//Mapping to execute update
 	
 	@RequestMapping(path = "ConfirmDelete.do", params = "id", method = RequestMethod.GET)
 	public ModelAndView confirmDelete(@RequestParam("id") int id) {
@@ -94,9 +97,9 @@ public class FilmController {
 	@RequestMapping(path = "DeleteFilm.do", params = "id", method = RequestMethod.POST)
 	public ModelAndView deleteFilm(int id, RedirectAttributes redir) throws SQLException {
 		Film film = filmDAO.findFilmById(id);
-		filmDAO.deleteFilmFromDatabase(film);
+		int deleteFlag = filmDAO.deleteFilmFromDatabase(film);
 		ModelAndView mv = new ModelAndView();
-		redir.addFlashAttribute("film", film);
+		redir.addFlashAttribute("deleteFlag", deleteFlag);
 		mv.setViewName("redirect:filmDeleted.do");
 		return mv;
 	}
