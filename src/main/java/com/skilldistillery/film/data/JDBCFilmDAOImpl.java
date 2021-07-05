@@ -153,7 +153,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	    Connection conn = null;
 	    String sql = "INSERT INTO film (title, description, release_year, language_id, rental_duration, "
 	    					+ "rental_rate, length, replacement_cost, rating, special_features)"
-	    			+ "VALUES (?, ?, ?, 1, ?, ?, ?, ?, ?, ?)";
+	    			+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 	    
 	    try {
 	      conn = DriverManager.getConnection(URL, user, pass);
@@ -163,31 +163,33 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	      st.setString(1, film.getTitle());
 	      st.setString(2, film.getDescription());
 	      st.setString(3, film.getReleaseYear());
-	      st.setInt(4, film.getRentalDuration());
-	      st.setDouble(5, film.getRentalRate());
-	      st.setInt(6, film.getLength());
-	      st.setDouble(7, film.getReplacementCost());
-	      st.setString(8, film.getRating());
-	      st.setString(9, film.getSpecialFeatures());
+	      st.setInt(4, film.getLanguageId());
+	      st.setInt(5, film.getRentalDuration());
+	      st.setDouble(6, film.getRentalRate());
+	      st.setInt(7, film.getLength());
+	      st.setDouble(8, film.getReplacementCost());
+	      st.setString(9, film.getRating());
+	      st.setString(10, film.getSpecialFeatures());
 	      
 	      int uc = st.executeUpdate();
-	      System.out.println(uc + " film records created.");
 	      
 	      if (uc != 1) {
-			System.err.println("Something went wrong"); //Error handling in case the INSERT did not work properly
 			conn.rollback(); //Error handling in case the INSERT did not work properly
 			return null;
 		}
 	      
-	      
-	      // Now get the auto-generated actor IDs:
+	      // Now get the auto-generated film ID and set it:
 	      ResultSet keys = st.getGeneratedKeys();
 	      
+	      //Set the filmId to the auto-generated ID from MySQL
 	      int filmId = 0;
 	      while (keys.next()) {
 	    	  filmId = keys.getInt(1);
-	        System.out.println("New film ID: " + filmId);
+	    	  film.setFilmId(filmId);
 	      }
+	      
+	      //Set the film's language name
+	     
 	      
 	      conn.commit();
 	      
@@ -406,7 +408,7 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 			while (languageResult.next()) {
 				language = new Language();
 				language.setId(languageResult.getInt("id"));
-				language.setLanguageName(languageResult.getString("name"));
+				language.setLanguageName(languageResult.getInt("id"));
 			}
 
 			languageResult.close();

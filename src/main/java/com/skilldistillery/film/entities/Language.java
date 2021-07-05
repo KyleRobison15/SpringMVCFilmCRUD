@@ -9,10 +9,10 @@ public class Language {
 		
 	}
 
-	public Language(int id, String languageName) {
+	public Language(int id) {
 		super();
 		this.id = id;
-		this.languageName = languageName;
+		setLanguageName(id);
 	}
 	
 	public int getId() {
@@ -21,14 +21,34 @@ public class Language {
 
 	public void setId(int id) {
 		this.id = id;
+
 	}
 
 	public String getLanguageName() {
 		return languageName;
 	}
 
-	public void setLanguageName(String languageName) {
-		this.languageName = languageName;
+	public void setLanguageName(int languageId) {
+		
+		switch(languageId) {
+		
+		case 1:
+			this.languageName = "English";
+		case 2:
+			this.languageName = "Italian";
+		case 3:
+			this.languageName = "Japanese";
+		case 4:
+			this.languageName = "Mandarin";
+		case 5:
+			this.languageName = "French";
+		case 6:
+			this.languageName = "German";
+		default:
+			this.languageName = "English";
+		
+		}
+		
 	}
 
 	@Override
