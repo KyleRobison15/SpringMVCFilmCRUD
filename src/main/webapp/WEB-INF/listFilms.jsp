@@ -24,8 +24,8 @@
 				<thead><th><strong>ID</strong></th><th><strong>Title</strong></th></thead>
 				<c:forEach items="${films }" var="film">
 					<tr>
-					<td>${film.filmId }</td>
-					<td>${film.title }</td>
+					<td><a href="GetFilmById.do?id=${film.filmId }" >${film.filmId }</a></td>
+					<td><a href="GetFilmById.do?id=${film.filmId }">${film.title }</a></td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -24,7 +24,7 @@ public class FilmController {
 	}
 
 	@RequestMapping(path = "ListAllFilms.do", method = RequestMethod.GET)
-	public ModelAndView listAllStates() {
+	public ModelAndView listAllFilms() {
 		ModelAndView mv = new ModelAndView();
 		List<Film> films = filmDAO.getFilms();
 
@@ -50,6 +50,7 @@ public class FilmController {
 		filmDAO.insertFilmToDatabase(film);
 		ModelAndView mv = new ModelAndView();
 		redir.addFlashAttribute("film", film);
+//		mv.addObject("addFlag", addFlag);
 		mv.setViewName("redirect:filmAdded.do");
 		return mv;
 	}
@@ -70,19 +71,32 @@ public class FilmController {
 
 		return mv;
 	}
-
-	@RequestMapping(path = "updateFilm.do", params = "id", method = RequestMethod.GET)
-	public ModelAndView updateFilmInDatabase(@RequestParam("id") int id) throws SQLException {
-		ModelAndView mv = new ModelAndView();
+	
+	@RequestMapping(path = "UpdateFilm.do", params = "id", method = RequestMethod.GET)
+	public ModelAndView updateFilm(int id) throws SQLException {
 		Film film = filmDAO.findFilmById(id);
-		filmDAO.updateFilmInDatabase(film);
+		ModelAndView mv = new ModelAndView();
 		mv.addObject("film", film);
 		mv.setViewName("updateFilm");
-
 		return mv;
 	}
 	
-	//Mapping to execute update
+	@RequestMapping(path = "ConfirmUpdate.do", method = RequestMethod.POST)
+	public ModelAndView confirmUpdate(Film film, RedirectAttributes redir) throws SQLException {
+		int updateFlag = filmDAO.updateFilmInDatabase(film);
+		ModelAndView mv = new ModelAndView();
+		redir.addFlashAttribute("updateFlag", updateFlag);
+		mv.setViewName("redirect:filmUpdated.do");
+		return mv;
+	}
+
+	@RequestMapping(path = "filmUpdated.do", method = RequestMethod.GET)
+	public ModelAndView filmUpdated(Film film) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("filmUpdated"); //TODO Create filmUpdated.jsp
+		return mv;
+	}
+	
 	
 	@RequestMapping(path = "ConfirmDelete.do", params = "id", method = RequestMethod.GET)
 	public ModelAndView confirmDelete(@RequestParam("id") int id) {

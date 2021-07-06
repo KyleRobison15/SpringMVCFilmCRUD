@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+    
     
 <!DOCTYPE html>
 <html>
@@ -16,27 +19,67 @@
 	<p><a href="index.html">Home</a></p>
 	
 		<h5>Enter the film's NEW details and then click "Update Film" to update it in the database: </h5>
-	
-				<form class="" action="updateFilm.do" method="POST">
-				
-				<input name = "id" type = "hidden" value=${film.filmId }>
-				<label for="title">Title: </label><input type="text" name="title" value="${film.title }" id="title"><br>
-				<label for="rating">Rating: </label><input name = "rating" type ="text" value="${film.rating }" id ="rating"><br>
-				<label for="description">Description: </label><input name = "description" type ="text" value ="${film.description }" id ="description"><br>
-				<label for="releaseYear">Release Year: </label><input name = "releaseYear" type ="text" value="${film.releaseYear.substring(0,4) }" id ="releaseYear"><br>
-				<label for="language">Language: </label><input name = "language" type ="text" value ="${film.language }" id = "language"><br>
-				<label for="length">Length: </label><input name = "length" type ="text" value="${film.length }" id = "language"> &nbsp; minutes
-<%-- 				<input name ="specialFeatures" value =${film.specialFeatures }>
-				<input name = "rentalRate" value =${film.rentalRate }>
-				<input name = "rentalDuration" value=${film.rentalDuration } &nbsp; days>
-				<input name = "replacementCost" value="${film.replacementCost }" type="currency"> --%>
 				
 				</form>
 				
-			<form action="filmUpdated.do" method="POST">
-				<input type="hidden" name="id" value="${film.filmId }">
-				<input type="submit" value="Confirm and Update" />
-			</form>
+				<form class="" action="ConfirmUpdate.do" method="POST">
+			<input name = "filmId" type = "hidden" value=${film.filmId } id = "filmId">
+			<label for="title">Title: </label><input type="text" name="title" value="${film.title }" id="title"><br>
+		
+<!-- 		<label for="category">Choose a Category: </label>
+			<select id="category" name="category">
+    			<option value="Action">Action</option>
+    			<option value="Animation">Animation</option>
+    			<option value="Children">Children</option>
+    			<option value="Classics">Classics</option>
+    			<option value="Comedy">Comedy</option>
+    			<option value="Documentary">Documentary</option>
+    			<option value="Drama">Drama</option>
+    			<option value="Family">Family</option>
+    			<option value="Foreign">Foreign</option>
+    			<option value="Games">Games</option>
+    			<option value="Horror">Horror</option>
+    			<option value="Music">Music</option>
+    			<option value="New">New</option>
+    			<option value="Sci-Fi">Sci-Fi</option>
+    			<option value="Sports">Sports</option>
+    			<option value="Travel">Travel</option>
+  			</select><br> -->	
+  			
+  		<label for="rating">Select a rating: </label><br>
+			<input type="radio" id = "rating" name="rating" value="G"> G
+			<input type="radio" id = "rating" name="rating" value="PG"> PG
+			<input type="radio" id = "rating" name="rating" value="PG13"> PG13
+			<input type="radio" id = "rating" name="rating" value="R"> R
+			<input type="radio" id = "rating" name="rating" value="NC17"> NC17 <br>
+
+		<label for="description">Description: </label><input type="text" name="description" value="${film.description }" id="description"><br>
+		<label for="realeaseYear">Release Year: </label><input type="text" name="releaseYear" value="${fn:substring(film.releaseYear, 0, 4)}" id="releaseYear"><br>
+		
+	 	 <label for="languageId">Choose a Language: </label>
+			<select id="languageId" name="languageId">
+    			<option value="1">English</option>
+    			<option value="2">Italian</option>
+    			<option value="3">Japanese</option>
+    			<option value="4">Mandarin</option>
+    			<option value="5">French</option>
+    			<option value="6">German</option>
+    		</select><br>
+	 	
+		<label for="length">Length (in minutes): </label><input type="text" name="length" value="${film.length }" id="length"><br>
+		
+		<label for="specialFeatures">Select any special features: </label><br>
+			<input type="checkbox" id = "specialFeatures" name="specialFeatures" value="Deleted Scenes" checked> Deleted Scenes
+			<input type="checkbox" id = "specialFeatures" name="specialFeatures" value="Commentaries" checked> Commentaries
+			<input type="checkbox" id = "specialFeatures" name="specialFeatures" value="Behind the Scenes" checked> Behind the Scenes
+			<input type="checkbox" id = "specialFeatures" name="specialFeatures" value="Trailers" checked> Trailers
+
+		<br><label for="rentalRate">Rental Rate: </label><input type="text" name="rentalRate" value="${film.rentalRate }" id="rentalRate"><br>
+		<label for="rentalDuration">Rental Duration (in days): </label><input type="text" name="rentalDuration" value="${film.rentalDuration }" id="rentalDuration"><br>
+		<label for="replacementCost">Replacement Cost: </label><input type="text" name="replacementCost" value="${film.replacementCost }" id="replacementCost"><br>
+		
+		<input type="submit" value="Confirm and Update" />
+	</form><br/>
 	
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4" crossorigin="anonymous"></script>

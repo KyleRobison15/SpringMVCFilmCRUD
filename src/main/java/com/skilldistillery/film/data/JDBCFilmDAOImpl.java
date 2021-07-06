@@ -205,59 +205,48 @@ public class JDBCFilmDAOImpl implements FilmDAO {
 	}
 //	TODO refine logic to match update and delete as these methods were copy pasted
 	@Override
-	public Film updateFilmInDatabase(Film film) throws SQLException {
+	public int updateFilmInDatabase(Film film) throws SQLException {
 		
 		Connection conn = null;
-		String sql = "UPDATE film SET title, description, release_year, language_id, rental_duration, "
-				+ "rental_rate, length, replacement_cost, rating, special_features WHERE"
-				+ "title, description, release_year, language_id, rental_duration, \"\n"
-				+ "				+ \"rental_rate, length, replacement_cost, rating, special_features = ?";
+		String sql = "UPDATE film SET title = ?, description = ?, release_year = ?, language_id = ?, rental_duration = ?, "
+				+ "rental_rate = ?, length = ?, replacement_cost = ?, rating = ?, special_features = ? WHERE id = ?";
 		
 		try {
 			conn = DriverManager.getConnection(URL, user, pass);
 			conn.setAutoCommit(false); // Start transaction
 			
-			PreparedStatement st = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			PreparedStatement st = conn.prepareStatement(sql);
 			st.setString(1, film.getTitle());
 			st.setString(2, film.getDescription());
 			st.setString(3, film.getReleaseYear());
-			st.setInt(4, film.getRentalDuration());
-			st.setDouble(5, film.getRentalRate());
-			st.setInt(6, film.getLength());
-			st.setDouble(7, film.getReplacementCost());
-			st.setString(8, film.getRating());
-			st.setString(9, film.getSpecialFeatures());
+			st.setInt(4, film.getLanguageId());
+			st.setInt(5, film.getRentalDuration());
+			st.setDouble(6, film.getRentalRate());
+			st.setInt(7, film.getLength());
+			st.setDouble(8, film.getReplacementCost());
+			st.setString(9, film.getRating());
+			st.setString(10, film.getSpecialFeatures());
+			st.setInt(11, film.getFilmId());
+			
+			System.out.println(st);
 			
 			int uc = st.executeUpdate();
-			System.out.println(uc + " film records created.");
 			
 			if (uc != 1) {
-				System.err.println("Something went wrong"); //Error handling in case the INSERT did not work properly
 				conn.rollback(); //Error handling in case the INSERT did not work properly
-				return null;
-			}
-			
-			
-			// Now get the auto-generated actor IDs:
-			ResultSet keys = st.getGeneratedKeys();
-			
-			int filmId = 0;
-			while (keys.next()) {
-				filmId = keys.getInt(1);
-				System.out.println("New film ID: " + filmId);
+				return 0;
 			}
 			
 			conn.commit();
-			
-			return findFilmById(filmId);
 			
 		}
 		catch (SQLException e) {
 			conn.rollback();
 			e.printStackTrace();
+			return 0;
 		}
 		conn.close();
-		return null;
+		return 1;
 	}
 	
 	@Override
